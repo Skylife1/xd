@@ -1,0 +1,2 @@
+Soy el padre y escribire en este documento 
+Soy el hijo y escribire en este documento 
