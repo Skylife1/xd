@@ -16,7 +16,7 @@
 
 # (5)
 
--No sucedera nada dado que el hijom si el padre no tiene restriccion se ejecutara de segundo siempre dado las prioridades del sistema operativo, por lo que el wait arrojara un valor diferente de 0 que significa que no tiene un proceso por el cual esperar 
+-No sucedera nada dado que el hijo si el padre no tiene restriccion se ejecutara de segundo siempre dado las prioridades del sistema operativo, por lo que el wait arrojara un valor diferente de 0 que significa que no tiene un proceso por el cual esperar 
 
 # (6)
 
