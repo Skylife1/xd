@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <signal.h>
+#include <ctype.h>
 
 int lsh_cd(char **args);
 int lsh_help(char **args);
@@ -12,6 +13,8 @@ int lsh_clear(char **args);
 int lsh_dir(char **args);
 int lsh_environ();
 int lsh_pause();
+int lsh_echo();
+int lsh_batchfile();
 
 char *builtin_str[] = {
 	"cd",
@@ -20,7 +23,9 @@ char *builtin_str[] = {
 	"clr",
 	"dir",
 	"environ",
-	"pause"
+	"pause",
+	"echo",
+	"batchfile"
 	};
 
 int (*builtin_func[]) (char **) = {
@@ -30,7 +35,9 @@ int (*builtin_func[]) (char **) = {
 	&lsh_clear,
 	&lsh_dir,
 	&lsh_environ,
-	&lsh_pause
+	&lsh_pause,
+	&lsh_echo,
+	&lsh_batchfile
 	};
 
 int lsh_num_builtins(){
@@ -57,7 +64,6 @@ int lsh_help(char **args){
 	for (i = 0; i < lsh_num_builtins(); i++) {
 		printf(" %s\n", builtin_str[i]);
 		}
-	printf("Usar el comando man para informacion en otros programas, sorry\n");
 	return 1;
 	}
 
@@ -65,7 +71,7 @@ int lsh_help(char **args){
 int lsh_actdir(){
 	char cwd[1024];
 	getcwd(cwd, sizeof(cwd));
-	printf("\nDir: %s",cwd);
+	printf("\nParent= %s",cwd);
 	return 1;
 }
 
@@ -96,6 +102,43 @@ int lsh_pause(){
 	scanf("%c", &ch);
 	printf("Reanudando");
 	}
+
+int lsh_echo(void){
+	printf("Digita el texto que deseas quitar espacios o tabuladores \n");
+    int c;
+
+    while ((c = getchar ()) != '\n' && c != EOF)
+    {
+        if (c == '\r') continue;
+        if (c == '\n') {        /* handle newlines/carriage-returns */
+            putchar (c);
+            while ((c = getchar ()) == '\n' || c == '\r') {}
+            if (c != EOF) ungetc (c, stdin); else break;
+            continue;
+        }
+        if (c == ' ' || c == '\t') {  /* spaces & tabs */
+            putchar (' ');
+            while ((c = getchar ()) == ' ' || c == '\t') {}
+            if (c != EOF) ungetc (c, stdin); else break;
+            continue;
+        }
+        putchar (c);
+    }
+	printf("\n");
+}
+
+
+int lsh_batchfile(){
+	int status;
+	if(fork() == 0){
+		//proceso hijo
+		status = system("batchfile");
+		exit(0);
+	}else{}
+	printf("\n");
+	return 0;
+	}
+
 
 int lsh_exit(char **args){
 	return 0;
